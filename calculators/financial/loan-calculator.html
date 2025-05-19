@@ -1,17 +1,97 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Loan Calculator | Financial Calculator</title>
-  <meta name="description" content="Use the Loan Calculator to solve your financial calculations online. Fast, easy, and accurate results.">
-  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Loan Calculator</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .calculator {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: 30px auto;
+      color: #fff;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      margin: 10px 0 5px;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #fff;
+      color: #ff5e62;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #ffd4d4;
+    }
+
+    .results {
+      margin-top: 20px;
+      text-align: left;
+    }
+  </style>
 </head>
 <body>
-  <header><h1>Loan Calculator</h1></header>
-  <main>
-    <p>This is a placeholder page for the loan calculator. You can add your custom tool functionality here.</p>
-  </main>
-  <footer><p>&copy; 2025 Colorful Calculator Hub</p></footer>
+  <header>
+    <h1>Loan Calculator</h1>
+  </header>
+
+  <section class="calculator">
+    <label for="amount">Loan Amount</label>
+    <input type="number" id="amount" placeholder="e.g. 10000" />
+
+    <label for="rate">Annual Interest Rate (%)</label>
+    <input type="number" id="rate" step="0.01" placeholder="e.g. 5" />
+
+    <label for="years">Loan Term (Years)</label>
+    <input type="number" id="years" placeholder="e.g. 5" />
+
+    <button onclick="calculateLoan()">Calculate</button>
+
+    <div class="results" id="results"></div>
+  </section>
+
+  <script>
+    function calculateLoan() {
+      const amount = parseFloat(document.getElementById('amount').value);
+      const rate = parseFloat(document.getElementById('rate').value) / 100 / 12;
+      const years = parseFloat(document.getElementById('years').value);
+      const payments = years * 12;
+
+      const x = Math.pow(1 + rate, payments);
+      const monthly = (amount * x * rate) / (x - 1);
+
+      if (!isNaN(monthly)) {
+        const totalPayment = (monthly * payments).toFixed(2);
+        const totalInterest = (totalPayment - amount).toFixed(2);
+
+        document.getElementById('results').innerHTML = `
+          <p><strong>Monthly Payment:</strong> $${monthly.toFixed(2)}</p>
+          <p><strong>Total Payment:</strong> $${totalPayment}</p>
+          <p><strong>Total Interest:</strong> $${totalInterest}</p>
+        `;
+      } else {
+        document.getElementById('results').innerHTML = '<p>Please fill in all fields correctly.</p>';
+      }
+    }
+  </script>
 </body>
 </html>
